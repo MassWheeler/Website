@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>End of date</title>
+    <meta name="viewport"
+content="width=device-width,initial-scale=1.0"/>
+<style>
+    html, body{
+        margin:auto;
+        padding:0;
+        height: 100%;
+        background: #000;
+        color: #27bd1c;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        overflow: hidden;
+    }
+
+    #locked {
+        position: fixed;
+        background: #000;
+        color: #27bd1c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        font-size: 1.1rem;
+        animation: fadein 1s ease-in-out;
+    }
+
+    #content {
+        display: none;
+        height: 100%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background: radial-gradient(circle at top, #222 0, #000 60%);
+        opacity: 0;
+        animation: fadeIn 1.5s ease-in-out forwards;
+        animation-delay: 0.5s;
+    }
+
+    #locked-label {
+        font-weight: 600;
+        letter-spacing: 0.05em;
+    }
+
+    #countdown{
+        font-size: 1.6rem;
+    }
+
+    .question-card {
+        background: rgba(0, 0, 0, 0.8);
+        padding: 2rem;
+        border-radius: 1rem;
+        max-width: 90%;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    }
+    h1 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        font-size: 1.7rem;
+    }
+
+    .buttons {
+        margin-top: 1.5rem;
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    
+    }
+
+
+    button {
+        cursor: pointer;
+        padding: 0.7rem 1.4rem;
+        border-radius: 999px;
+        border: none;
+        font-size: 1rem;
+        font-weight: 600;
+        background: #f5f5f5;
+        color: #111;
+        transition: transform 0.1s ease, opacity 0.1s ease;
+
+
+        }
+
+        button:hover {transform: translateY(-1px);opacity: 0.9;}
+        button:active {transform: translateY(1px) scale(0.98);}
+
+        #yesbtn {background: forestgreen;}
+        #nobtn {background: red}
+
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to { opacity: 1;}
+
+        }
+</style>
+</head>
+<body>
+    <div id = "locked">
+        <div id = "locked-label">Locked - time remaining</div>
+        <div id="countdown">calculating...</div>
+    </div>
+
+    <div id="content">
+        <div class="question-card">
+            <h1>I have a question</h1>
+            <p>id you have fun tonight/ did it go well?</p>
+            <div class="buttons">
+                <button id="yesbtn">Yes</button>
+                <button id="nobtn">No</button>
+            </div>
+            <div id="status"></div>
+        </div>
+    </div>
+    <script>
+        var unlockTime = new Date(2025,10,13,22,0,0);
+        var lockedDiv = document.getElementById('locked');
+        var contentDiv = document.getElementById('content');
+        var statusDiv = document.getElementById('status');
+        var yesbtn = document.getElementById('yesbtn');
+        var nobtn = document.getElementById('nobtn');
+        var countdownE1 = document.getElementById('countdown')
+
+        function pad2(value) {
+            return (value<10 ? "0" : "")+ value
+        }
+
+        function formatTimePart(value) {
+            return
+        value.toString(),padStart(2, '0');
+        }
+
+        function updateCountdown() {
+            const now = new Date();
+            const diffMs = unlockTime - now;
+
+            if (diffMs <=0){
+                lockedDiv.style.display='none'
+                contentDiv.style.display = 'flex'
+                clearInterval(timer);
+                return;
+            }
+
+            const totalSeconds = Math.floor(diffMs / 1000);
+            const days = Math.floor(totalSeconds/(24*60*60));
+            const hours = Math.floor((totalSeconds % (24*60*60))/(60*60));
+            const minutes = Math.floor((totalSeconds % (60*60))/60);
+            const seconds = totalSeconds % 60;
+                var text = '';
+                if (days > 0) {
+                    text+= days + "d ";}
+                text+= pad2(hours) + "h " + pad2(minutes)+ "m " + pad2(seconds)+"s ";
+
+                    countdownE1.textContent = text;
+        
+        }
+
+        const timer = setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        function checkUnblock() {
+            const now = new Date();
+            if (now >= unlockTime) {
+                lockedDiv.style.display = 'none'
+                contentDiv.style.display = 'flex';
+                clearInterval(intervalID);
+            }
+        }
+
+        const intervalID = setInterval(checkUnblock, 1000);
+        checkUnblock();
+
+        yesbtn.addEventListener('click',()=> {
+            statusDiv.textContent = "Do you want to be exclusive with me? Say yes or no";
+        
+        });
+
+        nobtn.addEventListener('click', () => {
+            window.close();
+            setTimeout(() => {window.location.href = "about:blank";}, 300);
+        
+        })
+
+    </script>
+</body>
+</html>
