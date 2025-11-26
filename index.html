@@ -1,196 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <title>End of date</title>
-    <meta name="viewport"
-content="width=device-width,initial-scale=1.0"/>
-<style>
-    html, body{
-        margin:auto;
-        padding:0;
-        height: 100%;
-        background: #000;
-        color: #27bd1c;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        overflow: hidden;
+  <meta charset="UTF-8">
+  <title>Code Click Story</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      background: black;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      cursor: pointer;
     }
 
-    #locked {
-        position: fixed;
-        background: #000;
-        color: #27bd1c;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        text-align: center;
-        font-size: 1.1rem;
-        animation: fadein 1s ease-in-out;
+    #container {
+      width: 90%;
+      max-width: 700px;
     }
 
-    #content {
-        display: none;
-        height: 100%;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        background: radial-gradient(circle at top, #222 0, #000 60%);
-        opacity: 0;
-        animation: fadeIn 1.5s ease-in-out forwards;
-        animation-delay: 0.5s;
+    pre {
+      font-size: 1.2rem;
+      min-height: 200px;
+      white-space: pre-wrap;
     }
 
-    #locked-label {
-        font-weight: 600;
-        letter-spacing: 0.05em;
+    .hint {
+      margin-top: 20px;
+      opacity: 0.6;
+      font-size: 0.9rem;
     }
-
-    #countdown{
-        font-size: 1.6rem;
-    }
-
-    .question-card {
-        background: rgba(0, 0, 0, 0.8);
-        padding: 2rem;
-        border-radius: 1rem;
-        max-width: 90%;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-    }
-    h1 {
-        margin-top: 0;
-        margin-bottom: 1rem;
-        font-size: 1.7rem;
-    }
-
-    .buttons {
-        margin-top: 1.5rem;
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-    
-    }
-
-
-    button {
-        cursor: pointer;
-        padding: 0.7rem 1.4rem;
-        border-radius: 999px;
-        border: none;
-        font-size: 1rem;
-        font-weight: 600;
-        background: #f5f5f5;
-        color: #111;
-        transition: transform 0.1s ease, opacity 0.1s ease;
-
-
-        }
-
-        button:hover {transform: translateY(-1px);opacity: 0.9;}
-        countdown:active {transform: translateY(1px) scale(0.98);}
-
-        #yesbtn {background: forestgreen;}
-        #nobtn {background: red}
-
-        @keyframes fadeIn {
-            from {opacity: 0;}
-            to { opacity: 1;}
-
-        }
-</style>
+  </style>
 </head>
 <body>
-    <div id = "locked">
-        <div id = "locked-label">Locked - time remaining</div>
-        <div id="countdown">calculating...</div>
-        <div id="locked-label">12 hours until our date! I wonder whats behind this</div>
-    </div>
+  <div id="container">
+    <pre id="text"></pre>
+    <div class="hint">tap or click anywhere to continue</div>
+  </div>
 
-    <div id="content">
-        <div class="question-card">
-            <h1>I have a question</h1>
-            <p>id you have fun tonight/ did it go well?</p>
-            <div class="buttons">
-                <button id="yesbtn">Yes</button>
-                <button id="nobtn">No</button>
-            </div>
-            <div id="status"></div>
-        </div>
-    </div>
-    <script>
-        var unlockTime = new Date(2025,10,13,19,0,0);
-        var lockedDiv = document.getElementById('locked');
-        var contentDiv = document.getElementById('content');
-        var statusDiv = document.getElementById('status');
-        var yesbtn = document.getElementById('yesbtn');
-        var nobtn = document.getElementById('nobtn');
-        var countdownE1 = document.getElementById('countdown')
+  <script>
+    // ✏️ EASY TO EDIT TEXT
+    const segments = [
+      "Hi Holly I dont have the money for flowers so this will have to do",
+      "I made this kinda quick so it might be shit",
+      "But I wanted to apologise ASAP",
+      "I have done a LOT of thinking recently and nearly said this last night I have the same self destructive aspects that you have I did not notice them properly and thought it was just me overthinking Hence me not saying anything yesterday",
+      "I am not as put together as you seem to think - I am the same as you in more ways than I can even explain. I am being self destructive just like you. Today took that and told me to lock the fuck in",
+      "I cannot fumble you.",
+      "I spent like 10 minutes changing the code to let that sink in with the fullstop - just needed the appreciation there",
+      "FUCK SHIT FUCK I WROTE OUT A PARAGRAPH AND USED A SPEECH MARK WHICH FUCKED UP EVERYTHING FUCK SHIT FUCK",
+      "In a nutshell. My life has been better since you came into it and you have made every day better than the last. I have not been the man you fell for. I have been a little fucking bastard haha so imma lock in to stop the being bothered (can we put that in speech marks because I cannot use them)",
+      "I mean what I have said to you and will show it in more ways than I am now",
+      "Not in a lovebombing way either (I also do wanna come tomorrow I was being petty)",
+      "ok back to finishing the advent calendar",
+      "<3"
 
-        function pad2(value) {
-            return (value<10 ? "0" : "")+ value
-        }
 
-        function formatTimePart(value) {
-            return
-        value.toString(),padStart(2, '0');
-        }
+    ];
 
-        function updateCountdown() {
-            const now = new Date();
-            const diffMs = unlockTime - now;
+    const textEl = document.getElementById("text");
+    const hintEl = document.querySelector(".hint");
 
-            if (diffMs <=0){
-                lockedDiv.style.display='none'
-                contentDiv.style.display = 'flex'
-                clearInterval(timer);
-                return;
-            }
+    let segmentIndex = 0;
+    let charIndex = 0;
+    let isTyping = true;
 
-            const totalSeconds = Math.floor(diffMs / 1000);
-            const days = Math.floor(totalSeconds/(24*60*60));
-            const hours = Math.floor((totalSeconds % (24*60*60))/(60*60));
-            const minutes = Math.floor((totalSeconds % (60*60))/60);
-            const seconds = totalSeconds % 60;
-                var text = '';
-                if (days > 0) {
-                    text+= days + "d ";}
-                text+= pad2(hours) + "h " + pad2(minutes)+ "m " + pad2(seconds)+"s ";
+    const typingSpeed = 16; // milliseconds per character
 
-                    countdownE1.textContent = text;
-        
-        }
+    function typeText() {
+      if (!isTyping) return;
 
-        const timer = setInterval(updateCountdown, 1000);
-        updateCountdown();
+      const current = segments[segmentIndex];
 
-        function checkUnblock() {
-            const now = new Date();
-            if (now >= unlockTime) {
-                lockedDiv.style.display = 'none'
-                contentDiv.style.display = 'flex';
-                clearInterval(intervalID);
-            }
-        }
+      if (charIndex < current.length) {
+        textEl.textContent += current.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeText, typingSpeed);
+      } else {
+        isTyping = false; // done typing this segment
+      }
+    }
 
-        const intervalID = setInterval(checkUnblock, 1000);
-        checkUnblock();
+    // start first text
+    textEl.textContent = "";
+    typeText();
 
-        yesbtn.addEventListener('click',()=> {
-            statusDiv.textContent = "Do you want to be exclusive with me? Say yes or no";
-        
-        });
+    document.body.addEventListener("click", () => {
+      // If still typing, finish instantly
+      if (isTyping) {
+        textEl.textContent = segments[segmentIndex];
+        isTyping = false;
+        return;
+      }
 
-        nobtn.addEventListener('click', () => {
-            window.close();
-            setTimeout(() => {window.location.href = "about:blank";}, 300);
-        
-        })
+      // Move to next segment
+      segmentIndex++;
 
-    </script>
+      if (segmentIndex >= segments.length) {
+        textEl.textContent = ">> END";
+        hintEl.style.display = "none";
+        return;
+      }
+
+      // Reset for next typing
+      textEl.textContent = "";
+      charIndex = 0;
+      isTyping = true;
+      typeText();
+    });
+  </script>
 </body>
-
 </html>
-
-
-
